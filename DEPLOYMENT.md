@@ -24,6 +24,8 @@
 - Node.js：22（或平台当前支持的 LTS 版本）
 - 环境变量：`BASE_PATH=/`、`SITE_URL=https://你的域名`
 
+仓库的 `package-lock.json` 使用公开 npm registry，GitHub Actions 也会显式使用该源，避免依赖公司内网镜像。
+
 EdgeOne 的免费额度、带宽和超额计费以控制台当前套餐页面为准；如果绑定 CDN、对象存储、独立域名或超出免费额度，可能产生额外费用。正式上线前应在腾讯云控制台确认当前价格和合规要求。
 
 ## 自定义域名

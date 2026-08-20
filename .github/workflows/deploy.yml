@@ -20,6 +20,7 @@ jobs:
     env:
       SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
       BASE_PATH: ${{ endsWith(github.event.repository.name, '.github.io') && '/' || format('/{0}/', github.event.repository.name) }}
+      NPM_CONFIG_REGISTRY: https://registry.npmjs.org
     steps:
       - name: Checkout
         uses: actions/checkout@v4
