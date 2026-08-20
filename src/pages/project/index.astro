@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const entries = (await getCollection('project'))
+  .sort((a, b) => (b.data.updated ?? b.data.date).valueOf() - (a.data.updated ?? a.data.date).valueOf());
+const base = import.meta.env.BASE_URL;
+---
+
+<SiteLayout active="project" title="rndyt / Project" description="rndyt 的项目成果、架构取舍和复盘记录。">
+  <section class="page-intro">
+    <div class="terminal-title"><span class="cursor" aria-hidden="true"></span> ~/notes/project</div>
+    <h1>从问题出发，<br />把结果讲完整。</h1>
+    <p>这里收录个人项目与实习项目的占位案例：背景、职责、关键取舍、结果和下一次会怎么做。</p>
+  </section>
+
+  <section class="index-workspace" aria-labelledby="project-list-title">
+    <aside class="pane directory-pane" aria-label="项目工作目录">
+      <span class="pane-label">~/notes/project</span>
+      <ul class="directory-tree">
+        <li class="tree-group">cases/</li>
+        <li><a href="#project-list-title" aria-current="page">ls -la</a></li>
+        <li><a href={base}>cd ../blog/</a></li>
+        <li><a href={`${base}ai/`}>cd ../ai/</a></li>
+        <li class="tree-group">readme/</li>
+        <li><a href="#project-list-title">cat decisions.md</a></li>
+      </ul>
+    </aside>
+    <div class="index-output">
+      <div class="section-heading">
+        <div>
+          <h2 id="project-list-title">项目记录 / project stdout</h2>
+        </div>
+        <span class="meta">{entries.length.toString().padStart(2, '0')} entries</span>
+      </div>
+      <div class="content-list project-list">
+        {entries.map((entry, index) => (
+          <article class="content-row project-row">
+            <div class="meta">
+              <span>P-{String(index + 1).padStart(2, '0')} / EXAMPLE</span>
+              <br />
+              <span>{(entry.data.updated ?? entry.data.date).toISOString().slice(0, 10)}</span>
+            </div>
+            <div>
+              <h3><a href={`${base}project/${entry.id}/`}>{entry.data.title}</a></h3>
+              <p class="summary">{entry.data.description}</p>
+              <div class="tag-list">
+                <span class="kind">{entry.data.role ?? 'preview case'}</span>
+                {entry.data.stack.map((item) => <span class="tag">{item}</span>)}
+              </div>
+            </div>
+            <a class="row-arrow" href={`${base}project/${entry.id}/`} aria-label={`阅读 ${entry.data.title}`}>-&gt;</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</SiteLayout>

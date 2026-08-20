@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  updated?: Date;
+  kind: string;
+  tags: string[];
+  href?: string;
+  index?: string;
+}
+
+const { title, description, date, updated, kind, tags, href, index } = Astro.props;
+const displayDate = (updated ?? date).toISOString().slice(0, 10);
+const kindLabels: Record<string, string> = {
+  article: 'ARTICLE',
+  note: 'NOTE',
+  experiment: 'EXPERIMENT',
+  'case-study': 'CASE STUDY'
+};
+---
+
+<article class="content-row">
+  <div class="meta">
+    <span>{index ?? displayDate}</span>
+    {index && <><br /><span>{displayDate}</span></>}
+  </div>
+  <div>
+    <h3>
+      {href ? <a href={href}>{title}</a> : <span>{title}</span>}
+    </h3>
+    <p class="summary">{description}</p>
+    <div class="tag-list" aria-label="内容标签">
+      <span class="kind">{kindLabels[kind] ?? kind.toUpperCase()}</span>
+      {tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+  {href && <a class="row-arrow" href={href} aria-label={`阅读 ${title}`}>-&gt;</a>}
+</article>

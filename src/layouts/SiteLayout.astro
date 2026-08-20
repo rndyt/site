@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'blog' | 'ai' | 'project';
+}
+
+const {
+  title = 'rndyt / engineering notes',
+  description = 'rndyt 的工程思考、AI-native 工作流和项目记录。',
+  active
+} = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const navItems = [
+  { label: 'Blog', href: base, key: 'blog' },
+  { label: 'AI', href: `${base}ai/`, key: 'ai' },
+  { label: 'Project', href: `${base}project/`, key: 'project' }
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!--
+      THESIS: rndyt is a TUI reading session, not a decorative terminal skin; the shell is the way readers inspect engineering judgment.
+      OWN-WORLD: dark terminal buffer, fixed-width paths, pane borders, ANSI accents, inverse selection, and a single block cursor.
+      STORY: visitors enter a working directory, read stdout-like summaries, then open Blog, AI, or Project as deeper session panes.
+      FIRST VIEWPORT: terminal chrome and prompt first, directory tree left, engineering thesis center, session status right, recent output below.
+      FORM: TUI Reading Session / tmux reading desk, chosen from the direction round with seed 86235ece; code-led build.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-inner">
+          <a class="window-label" href={base} aria-label="回到 rndyt 首页">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>rndyt@local:~/notes</span>
+          </a>
+          <nav class="site-nav" aria-label="主导航">
+            {navItems.map((item) => (
+              <a class="nav-link" href={item.href} aria-current={active === item.key ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <main class="page-shell">
+        <div class="preview-banner" role="status">
+          <span>$ printenv SITE_MODE=preview</span>
+          <span>内容尚未替换为真实资料 · 不用于正式履历</span>
+        </div>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-inner">
+          <span>rndyt / notes from the build loop</span>
+          <span><a href="mailto:hello@rndyt.example">hello@rndyt.example</a> · <a href="https://github.com/rndyt">GitHub</a></span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

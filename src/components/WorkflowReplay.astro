@@ -1,0 +1,99 @@
+---
+const steps = [
+  {
+    label: '01 / define',
+    title: '先把问题写成可以验证的输入',
+    body: '示例：一段 Java service 在高峰期重复读取同一份配置。目标不是“让 AI 优化代码”，而是找出可复现的风险并给出最小改动建议。',
+    output: 'input/problem.md\n\ncontext: repeated config reads\nconstraint: preserve public API\nquestion: where is the avoidable work?'
+  },
+  {
+    label: '02 / propose',
+    title: '让 AI 先提出假设，而不是直接改代码',
+    body: '示例：模型标出调用链、列出两个可能的缓存边界，并把不确定的地方写成待验证假设。这里保留原始上下文，方便复盘。',
+    output: 'model/proposal.txt\n\nassumption A: config lookup is request-invariant\nassumption B: local cache lifetime is bounded\nconfidence: medium'
+  },
+  {
+    label: '03 / review',
+    title: '由人决定哪些建议有资格进入代码',
+    body: '示例：人工检查配置的生命周期、并发语义和异常路径，只采纳不改变外部契约的那一部分；模型建议本身不是结论。',
+    output: 'review/decision.md\n\naccept: memoize lookup per request\nreject: global cache without invalidation\nreason: ownership and staleness risk'
+  },
+  {
+    label: '04 / verify',
+    title: '用测试和可观测结果结束这次循环',
+    body: '示例：补一条回归测试，再用固定输入跑一次基准。只有能解释结果，工作流才算完成；否则退回到问题定义。',
+    output: 'verification/result.txt\n\nregression: passing\nbenchmark: captured\nnext: compare under production-like load'
+  }
+];
+---
+
+<section class="replay-shell" data-replay aria-label="AI 工作流 replay">
+  <div class="replay-header">
+    <strong>process: workflow-replay / placeholder</strong>
+    <span>stdout: deterministic output</span>
+  </div>
+  <div class="replay-controls" role="tablist" aria-label="工作流步骤">
+    {steps.map((step, index) => (
+      <button
+        class="replay-step"
+        type="button"
+        role="tab"
+        id={`replay-tab-${index}`}
+        aria-controls={`replay-panel-${index}`}
+        aria-selected={index === 0 ? 'true' : 'false'}
+        tabindex={index === 0 ? '0' : '-1'}
+        data-step={index}
+      >
+        {step.label}
+      </button>
+    ))}
+  </div>
+  {steps.map((step, index) => (
+    <div
+      class="replay-panel"
+      role="tabpanel"
+      id={`replay-panel-${index}`}
+      aria-labelledby={`replay-tab-${index}`}
+      tabindex="0"
+      data-panel={index}
+      data-active={index === 0 ? 'true' : 'false'}
+    >
+      <h3>{step.title}</h3>
+      <p>{step.body}</p>
+      <div class="replay-output">{step.output}</div>
+    </div>
+  ))}
+  <div class="replay-foot"><i aria-hidden="true"></i> replay is a fixed sample; no external model is called</div>
+</section>
+
+<script>
+  const replay = document.querySelector('[data-replay]');
+  const controls = replay ? Array.from(replay.querySelectorAll<HTMLButtonElement>('[data-step]')) : [];
+  const panels = replay ? Array.from(replay.querySelectorAll<HTMLElement>('[data-panel]')) : [];
+
+  controls?.forEach((control) => {
+    control.addEventListener('click', () => {
+      const selected = control.getAttribute('data-step');
+      controls.forEach((item) => {
+        const active = item === control;
+        item.setAttribute('aria-selected', active ? 'true' : 'false');
+        item.setAttribute('tabindex', active ? '0' : '-1');
+      });
+      panels?.forEach((panel) => panel.setAttribute('data-active', panel.getAttribute('data-panel') === selected ? 'true' : 'false'));
+    });
+
+    control.addEventListener('keydown', (event: KeyboardEvent) => {
+      const current = Array.from(controls).indexOf(control);
+      let next = current;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (current + 1) % controls.length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (current - 1 + controls.length) % controls.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = controls.length - 1;
+      if (next === current) return;
+      event.preventDefault();
+      const nextControl = controls[next];
+      nextControl?.focus();
+      nextControl?.click();
+    });
+  });
+</script>

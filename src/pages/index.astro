@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ContentRow from '../components/ContentRow.astro';
+
+const entries = (await getCollection('blog'))
+  .sort((a, b) => (b.data.updated ?? b.data.date).valueOf() - (a.data.updated ?? a.data.date).valueOf());
+const featured = entries.find((entry) => entry.data.featured) ?? entries[0];
+const recentEntries = entries.slice(0, 3);
+const base = import.meta.env.BASE_URL;
+---
+
+<SiteLayout active="blog" title="rndyt / Blog" description="rndyt 的工程思考、AI-native 工作流和项目记录。">
+  <section class="terminal-frame home-workspace" aria-labelledby="profile-title">
+    <div class="terminal-chrome">
+      <strong>tmux: rndyt-home</strong>
+      <span>session 01 / attached</span>
+    </div>
+    <div class="workspace-path">pwd && printf 'engineering notes\\n'</div>
+    <div class="home-grid">
+      <aside class="pane directory-pane" aria-label="工作目录">
+        <span class="pane-label">~/notes</span>
+        <ul class="directory-tree">
+          <li class="tree-group">sections/</li>
+          <li><a href={base} aria-current="page">blog/</a></li>
+          <li><a href={`${base}ai/`}>ai/</a></li>
+          <li><a href={`${base}project/`}>project/</a></li>
+          <li class="tree-group">files/</li>
+          <li><a href={`${base}#recent-output`}>README.md</a></li>
+          <li><a href={`${base}ai/ai-workflow-placeholder/`}>workflow.replay</a></li>
+        </ul>
+      </aside>
+
+      <div class="pane output-pane">
+        <div class="command-line" aria-label="当前命令">
+          <span class="prompt">$</span>
+          <span class="command">cat</span>
+          <span class="arg">README.md</span>
+        </div>
+        <p class="terminal-comment">a personal engineering workspace / preview build</p>
+        <h1 id="profile-title">rndyt</h1>
+        <p class="profile-copy">
+          我在 Java 后端和 AI-native 工程实践之间持续搭建、拆解和复盘。这里记录那些值得解释的技术判断：<strong>问题如何被定义，工具如何被约束，结果如何被验证</strong>。
+        </p>
+      </div>
+
+      <aside class="pane status-pane" aria-label="当前会话状态">
+        <span class="pane-label">session.status</span>
+        <dl class="status-stack">
+          <div class="status-item"><dt>focus</dt><dd><strong>backend systems</strong></dd></div>
+          <div class="status-item"><dt>exploring</dt><dd><span class="amber">AI-assisted workflow</span></dd></div>
+          <div class="status-item"><dt>mode</dt><dd><strong>learning in public</strong></dd></div>
+          <div class="status-item"><dt>content</dt><dd>preview / 07 entries</dd></div>
+        </dl>
+      </aside>
+    </div>
+    <div class="terminal-commandbar">
+      <span class="command-prompt">$</span>
+      <a href={`${base}#recent-output`}>inspect recent</a>
+      <span class="hint">[enter] follow output</span>
+      <a href={`${base}ai/`}>cd ai/</a>
+      <a href={`${base}project/`}>cd project/</a>
+    </div>
+  </section>
+
+  <section id="recent-output" class="content-section" aria-labelledby="recent-title">
+    <div class="section-heading">
+      <div>
+        <h2 id="recent-title">最近输出 / recent stdout</h2>
+      </div>
+        <a href={`${base}ai/`}>$ cd ai/</a>
+    </div>
+    <div class="content-list">
+      {recentEntries.map((entry) => (
+        <ContentRow
+          title={entry.data.title}
+          description={entry.data.description}
+          date={entry.data.date}
+          updated={entry.data.updated}
+          kind={entry.data.kind}
+          tags={entry.data.tags}
+          href={`${base}blog/${entry.id}/`}
+          index={entry === featured ? 'FEATURED' : undefined}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="content-section" aria-labelledby="signals-title">
+    <div class="section-heading">
+      <div>
+        <h2 id="signals-title">继续读取 / next panes</h2>
+      </div>
+    </div>
+    <div class="content-list">
+      <a class="content-row" href={`${base}ai/`}>
+        <div class="meta">AI / 01</div>
+        <div>
+          <h3>把 AI 放进工程循环里</h3>
+          <p class="summary">从问题定义到验证结果，查看 AI-native 工作流的占位实验与固定 replay。</p>
+          <div class="tag-list"><span class="kind">WORKSPACE</span><span class="tag">workflow</span><span class="tag">replay</span></div>
+        </div>
+        <span class="row-arrow" aria-hidden="true">-&gt;</span>
+      </a>
+      <a class="content-row" href={`${base}project/`}>
+        <div class="meta">PROJECT / 02</div>
+        <div>
+          <h3>看完整项目，而不只是技术名词</h3>
+          <p class="summary">项目页把背景、取舍、结果和复盘放在同一个阅读上下文里。</p>
+          <div class="tag-list"><span class="kind">INDEX</span><span class="tag">Java</span><span class="tag">architecture</span></div>
+        </div>
+        <span class="row-arrow" aria-hidden="true">-&gt;</span>
+      </a>
+    </div>
+  </section>
+</SiteLayout>

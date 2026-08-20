@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('project');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL;
+---
+
+<SiteLayout active="project" title={`rndyt / ${entry.data.title}`} description={entry.data.description}>
+  <article class="article-shell project-article">
+    <header class="article-header">
+      <div class="terminal-title"><span class="cursor" aria-hidden="true"></span> ~/notes/project/{entry.id}</div>
+      <h1>{entry.data.title}</h1>
+      <p class="article-description">{entry.data.description}</p>
+      <div class="article-meta">
+        <span>kind={entry.data.kind}</span>
+        <span>role={entry.data.role ?? 'preview case'}</span>
+        <span>{(entry.data.updated ?? entry.data.date).toISOString().slice(0, 10)}</span>
+        <a href={`${base}project/`}>$ cd ..</a>
+      </div>
+    </header>
+
+    <dl class="project-facts" aria-label="项目摘要">
+      <div><dt>stack</dt><dd>{entry.data.stack.join(' / ') || 'not listed'}</dd></div>
+      <div><dt>status</dt><dd><strong>preview / example</strong></dd></div>
+      <div><dt>links</dt><dd>{entry.data.links.length ? entry.data.links.map((link) => <a href={link.href}>{link.label}</a>) : 'none published'}</dd></div>
+    </dl>
+
+    <div class="article-body">
+      <Content />
+    </div>
+  </article>
+</SiteLayout>

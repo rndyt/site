@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ContentRow from '../../components/ContentRow.astro';
+
+const entries = (await getCollection('ai'))
+  .sort((a, b) => (b.data.updated ?? b.data.date).valueOf() - (a.data.updated ?? a.data.date).valueOf());
+const base = import.meta.env.BASE_URL;
+---
+
+<SiteLayout active="ai" title="rndyt / AI" description="rndyt 的 AI-native 工程实践、实验记录和 workflow replay。">
+  <section class="page-intro">
+    <div class="terminal-title"><span class="cursor" aria-hidden="true"></span> ~/notes/ai</div>
+    <h1>让 AI 参与工作，<br />让判断留下痕迹。</h1>
+    <p>这里不是工具目录，而是把 AI 放进调研、设计、编码、测试与复盘之后，留下的一组可复查的思路、实验和固定 replay。</p>
+  </section>
+
+  <section class="index-workspace" aria-labelledby="ai-list-title">
+    <aside class="pane directory-pane" aria-label="AI 工作目录">
+      <span class="pane-label">~/notes/ai</span>
+      <ul class="directory-tree">
+        <li class="tree-group">commands/</li>
+        <li><a href="#ai-list-title" aria-current="page">ls -la</a></li>
+        <li><a href={`${base}ai/ai-workflow-placeholder/`}>cat workflow.replay</a></li>
+        <li class="tree-group">related/</li>
+        <li><a href={base}>cd ../blog/</a></li>
+        <li><a href={`${base}project/`}>cd ../project/</a></li>
+      </ul>
+    </aside>
+    <div class="index-output">
+      <div class="section-heading">
+        <div>
+          <h2 id="ai-list-title">专题内容 / ai stdout</h2>
+        </div>
+        <span class="meta">{entries.length.toString().padStart(2, '0')} entries</span>
+      </div>
+      <div class="content-list">
+        {entries.map((entry) => (
+          <ContentRow
+            title={entry.data.title}
+            description={entry.data.description}
+            date={entry.data.date}
+            updated={entry.data.updated}
+            kind={entry.data.kind}
+            tags={entry.data.tags}
+            href={`${base}ai/${entry.id}/`}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</SiteLayout>

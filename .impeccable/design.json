@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-19T20:04:00Z",
+  "title": "Design System: rndyt TUI Reading Session",
+  "extensions": {
+    "colorMeta": {
+      "canvas": {"role": "neutral", "displayName": "Terminal Canvas", "tonalRamp": ["#0B0F14", "#10161E", "#141C26"]},
+      "green": {"role": "primary", "displayName": "Cursor Green", "tonalRamp": ["#A3C94D", "#D7FF6A", "#E8FF9B"]},
+      "cyan": {"role": "secondary", "displayName": "Terminal Cyan", "tonalRamp": ["#4B9BAB", "#7BDFF2", "#B7F2FA"]},
+      "amber": {"role": "tertiary", "displayName": "Process Amber", "tonalRamp": ["#B68F4B", "#FFCB6B", "#FFE1A0"]},
+      "dim": {"role": "neutral", "displayName": "Readable Dim Text", "tonalRamp": ["#657482", "#7D8D9C", "#A3B0BC"]}
+    },
+    "typographyMeta": {
+      "display": {"displayName": "System UI Display", "purpose": "Identity and first-viewport thesis."},
+      "label": {"displayName": "SF Mono Labels", "purpose": "Paths, commands, metadata, tabs, and status."}
+    },
+    "shadows": [],
+    "motion": [
+      {"name": "state-transition", "value": "color .16s ease, background .16s ease, border-color .16s ease", "purpose": "Small state changes for links, panes, tabs, and output rows."},
+      {"name": "cursor-blink", "value": "steps(1), 1.1s", "purpose": "One terminal cursor cue; disabled under reduced motion."}
+    ],
+    "breakpoints": [
+      {"name": "pane-collapse", "value": "900px"},
+      {"name": "mobile-stack", "value": "700px"},
+      {"name": "narrow-row", "value": "470px"}
+    ]
+  },
+  "components": [
+    {
+      "name": "Terminal Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "A real link styled as a cd command with an explicit active state.",
+      "html": "<a class=\"ds-nav\" href=\"/ai/\" aria-current=\"page\">AI</a>",
+      "css": ".ds-nav { display:inline-flex; min-height:32px; align-items:center; gap:6px; padding:4px 9px; border:1px solid transparent; color:#7D8D9C; background:transparent; font:400 .72rem/1.4 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace; text-decoration:none; } .ds-nav::before { content:'cd '; color:#7D8D9C; } .ds-nav:hover, .ds-nav[aria-current='page'] { color:#D7FF6A; border-color:#293644; background:#10161E; } .ds-nav:focus-visible { outline:2px solid #D7FF6A; outline-offset:3px; }"
+    },
+    {
+      "name": "Terminal Pane",
+      "kind": "custom",
+      "refersTo": "pane",
+      "description": "A square terminal surface with a label, path, and structural border.",
+      "html": "<section class=\"ds-pane\"><span class=\"ds-label\"># session.status</span><p><strong>attached</strong> / preview</p></section>",
+      "css": ".ds-pane { padding:16px; border:1px solid #293644; background:#10161E; color:#E8EDF2; } .ds-label { display:block; margin-bottom:14px; color:#7D8D9C; font:400 .7rem/1.4 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace; } .ds-label::before { content:'# '; color:#45586C; } .ds-pane strong { color:#D7FF6A; font-weight:500; }"
+    },
+    {
+      "name": "Output Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "A square metadata tag used in output rows and project records.",
+      "html": "<span class=\"ds-tag\">workflow</span>",
+      "css": ".ds-tag { display:inline-flex; min-height:21px; align-items:center; padding:1px 6px; border:1px solid #293644; color:#7D8D9C; background:#10161E; font:400 .63rem/1.4 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace; } .ds-tag::before { content:'#'; color:#45586C; }"
+    },
+    {
+      "name": "Replay Tab",
+      "kind": "button",
+      "refersTo": "replay-step",
+      "description": "A keyboard-navigable process step with an active stdout state.",
+      "html": "<button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">01 / define</button>",
+      "css": ".ds-tab { min-height:35px; padding:6px 9px; border:0; border-bottom:2px solid transparent; color:#7D8D9C; background:transparent; cursor:pointer; font:400 .66rem/1.4 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace; } .ds-tab:hover { color:#B8C3CE; background:#1A2632; } .ds-tab[aria-selected='true'] { color:#D7FF6A; border-bottom-color:#D7FF6A; background:#1A2632; } .ds-tab:focus-visible { outline:2px solid #D7FF6A; outline-offset:-2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A tmux reading desk for engineering judgment.",
+    "overview": "rndyt is presented as a persistent shell session. Paths, commands, pane borders, stdout-like summaries, and status labels make the site easy to scan without turning the content into fake terminal roleplay. Pixel character comes from a fixed-width cell discipline and discrete cursor/selection states.",
+    "keyCharacteristics": ["Dark terminal buffer", "Three-pane TUI layout", "ANSI accent rarity", "Readable Chinese prose", "Square structural borders"],
+    "rules": [
+      {"name": "ANSI Rarity Rule", "body": "Accent colors identify state or affordance; they never wash whole surfaces.", "section": "colors"},
+      {"name": "Command/Content Rule", "body": "Mono labels orient the reader; prose remains normal technical writing.", "section": "typography"},
+      {"name": "Flat Buffer Rule", "body": "Depth comes from tonal layers and borders, not shadows or glow.", "section": "elevation"}
+    ],
+    "dos": ["Use functional paths and command-like labels.", "Keep content rows and panes consistent across routes.", "Preserve focus and reduced-motion states."],
+    "donts": ["Do not use hardware-display or arcade metaphors as the primary structure.", "Do not use gradients, scanline overlays, or rounded card walls.", "Do not hide real links behind terminal decoration."]
+  }
+}
