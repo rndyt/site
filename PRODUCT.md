@@ -30,6 +30,7 @@ The site connects technical ideas to inspectable reasoning and evidence. AI cont
 - `AI` is a dedicated workspace for AI-native thinking, experiments, and article-attached demos or deterministic workflow replays.
 - `Project` contains complete personal or internship project cases organized around context, responsibility, technical decisions, outcomes, and reflection.
 - Every item has one primary section and may be discovered through cross-section relationships without duplicating the content.
+- Topic series provide ordered reading paths across Blog and AI while every article keeps its original primary section and URL.
 - Content is written and reviewed as Markdown in the repository.
 
 ## Capabilities and Constraints

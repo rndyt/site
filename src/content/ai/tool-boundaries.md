@@ -7,6 +7,8 @@ featured: false
 preview: true
 kind: note
 replay: false
+series: ai-native-loop
+seriesOrder: 1
 ---
 
 > 这是预览站占位内容，不代表 rndyt 的真实实验。

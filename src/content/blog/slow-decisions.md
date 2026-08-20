@@ -7,6 +7,8 @@ tags: [engineering, decision, backend]
 featured: true
 preview: true
 kind: article
+series: engineering-decisions
+seriesOrder: 1
 ---
 
 > 这是预览站占位内容，不代表 rndyt 的真实文章。

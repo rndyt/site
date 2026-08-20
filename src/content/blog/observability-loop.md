@@ -6,6 +6,8 @@ tags: [observability, postmortem, systems]
 featured: false
 preview: true
 kind: article
+series: engineering-decisions
+seriesOrder: 3
 ---
 
 > 这是预览站占位内容，不代表 rndyt 的真实文章。

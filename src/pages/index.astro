@@ -5,6 +5,13 @@ import ContentRow from '../components/ContentRow.astro';
 
 const entries = (await getCollection('blog'))
   .sort((a, b) => (b.data.updated ?? b.data.date).valueOf() - (a.data.updated ?? a.data.date).valueOf());
+const aiEntries = await getCollection('ai');
+const seriesEntries = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
+const seriesCounts = [...entries, ...aiEntries].reduce<Record<string, number>>((counts, entry) => {
+  const seriesId = entry.data.series?.id;
+  if (seriesId) counts[seriesId] = (counts[seriesId] ?? 0) + 1;
+  return counts;
+}, {});
 const featured = entries.find((entry) => entry.data.featured) ?? entries[0];
 const recentEntries = entries.slice(0, 3);
 const base = import.meta.env.BASE_URL;
@@ -25,6 +32,7 @@ const base = import.meta.env.BASE_URL;
           <li><a href={base} aria-current="page">blog/</a></li>
           <li><a href={`${base}ai/`}>ai/</a></li>
           <li><a href={`${base}project/`}>project/</a></li>
+          <li><a href={`${base}#topic-series`}>series/</a></li>
           <li class="tree-group">files/</li>
           <li><a href={`${base}#recent-output`}>README.md</a></li>
           <li><a href={`${base}ai/ai-workflow-placeholder/`}>workflow.replay</a></li>
@@ -86,31 +94,32 @@ const base = import.meta.env.BASE_URL;
     </div>
   </section>
 
-  <section class="content-section" aria-labelledby="signals-title">
+  <section id="topic-series" class="content-section" aria-labelledby="series-title">
     <div class="section-heading">
       <div>
-        <h2 id="signals-title">继续读取 / next panes</h2>
+        <h2 id="series-title">主题系列 / topic series</h2>
       </div>
+      <span>{seriesEntries.length.toString().padStart(2, '0')} series</span>
     </div>
-    <div class="content-list">
-      <a class="content-row" href={`${base}ai/`}>
-        <div class="meta">AI / 01</div>
-        <div>
-          <h3>把 AI 放进工程循环里</h3>
-          <p class="summary">从问题定义到验证结果，查看 AI-native 工作流的占位实验与固定 replay。</p>
-          <div class="tag-list"><span class="kind">WORKSPACE</span><span class="tag">workflow</span><span class="tag">replay</span></div>
-        </div>
-        <span class="row-arrow" aria-hidden="true">-&gt;</span>
-      </a>
-      <a class="content-row" href={`${base}project/`}>
-        <div class="meta">PROJECT / 02</div>
-        <div>
-          <h3>看完整项目，而不只是技术名词</h3>
-          <p class="summary">项目页把背景、取舍、结果和复盘放在同一个阅读上下文里。</p>
-          <div class="tag-list"><span class="kind">INDEX</span><span class="tag">Java</span><span class="tag">architecture</span></div>
-        </div>
-        <span class="row-arrow" aria-hidden="true">-&gt;</span>
-      </a>
+    <div class="content-list series-list">
+      {seriesEntries.map((series) => (
+        <a class="content-row series-row" href={`${base}series/${series.id}/`}>
+          <div class="meta">
+            <span>TOPIC</span>
+            <br />
+            <span>{String(seriesCounts[series.id] ?? 0).padStart(2, '0')} entries</span>
+          </div>
+          <div>
+            <h3>{series.data.title}</h3>
+            <p class="summary">{series.data.description}</p>
+            <div class="tag-list">
+              <span class="kind">{series.data.status.toUpperCase()}</span>
+              {series.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </div>
+          <span class="row-arrow" aria-hidden="true">-&gt;</span>
+        </a>
+      ))}
     </div>
   </section>
 </SiteLayout>

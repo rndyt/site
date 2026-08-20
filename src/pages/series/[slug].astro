@@ -1,0 +1,85 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const seriesEntries = await getCollection('series');
+  return seriesEntries.map((series) => ({
+    params: { slug: series.id },
+    props: { series }
+  }));
+}
+
+const { series } = Astro.props;
+const { Content } = await render(series);
+const base = import.meta.env.BASE_URL;
+const allSeries = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
+const blogEntries = (await getCollection('blog')).map((entry) => ({ entry, section: 'blog' as const }));
+const aiEntries = (await getCollection('ai')).map((entry) => ({ entry, section: 'ai' as const }));
+const articles = [...blogEntries, ...aiEntries]
+  .filter(({ entry }) => entry.data.series?.id === series.id)
+  .sort((a, b) => (a.entry.data.seriesOrder ?? 999) - (b.entry.data.seriesOrder ?? 999));
+---
+
+<SiteLayout title={`rndyt / ${series.data.title}`} description={series.data.description}>
+  <section class="page-intro series-intro" aria-labelledby="series-page-title">
+    <div class="terminal-title"><span class="cursor" aria-hidden="true"></span> ~/notes/series/{series.id}</div>
+    <h1 id="series-page-title">{series.data.title}</h1>
+    <p>{series.data.description}</p>
+    <div class="article-meta series-meta">
+      <span>status={series.data.status}</span>
+      <span>entries={articles.length.toString().padStart(2, '0')}</span>
+      <span>{series.data.tags.map((tag: string) => `#${tag}`).join(' ')}</span>
+      <a href={`${base}#topic-series`}>$ cd ..</a>
+    </div>
+  </section>
+
+  <div class="series-overview article-body">
+    <Content />
+  </div>
+
+  <section class="index-workspace series-workspace" aria-labelledby="series-reading-title">
+    <aside class="pane directory-pane" aria-label="主题系列目录">
+      <span class="pane-label">~/notes/series</span>
+      <ul class="directory-tree">
+        <li class="tree-group">topics/</li>
+        {allSeries.map((item) => (
+          <li>
+            <a href={`${base}series/${item.id}/`} aria-current={item.id === series.id ? 'page' : undefined}>
+              {item.id}/
+            </a>
+          </li>
+        ))}
+        <li class="tree-group">navigation/</li>
+        <li><a href={base}>cd ~/notes/</a></li>
+      </ul>
+    </aside>
+
+    <div class="index-output">
+      <div class="section-heading">
+        <div><h2 id="series-reading-title">阅读顺序 / reading queue</h2></div>
+        <span class="meta">{articles.length.toString().padStart(2, '0')} entries</span>
+      </div>
+      <div class="content-list">
+        {articles.map(({ entry, section }, index) => (
+          <article class="content-row series-entry-row">
+            <div class="meta">
+              <span>STEP {String(index + 1).padStart(2, '0')}</span>
+              <br />
+              <span>{section.toUpperCase()} / {(entry.data.updated ?? entry.data.date).toISOString().slice(0, 10)}</span>
+            </div>
+            <div>
+              <h3><a href={`${base}${section}/${entry.id}/`}>{entry.data.title}</a></h3>
+              <p class="summary">{entry.data.description}</p>
+              <div class="tag-list">
+                <span class="kind">{entry.data.kind.toUpperCase()}</span>
+                {entry.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+            <a class="row-arrow" href={`${base}${section}/${entry.id}/`} aria-label={`阅读 ${entry.data.title}`}>-&gt;</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</SiteLayout>

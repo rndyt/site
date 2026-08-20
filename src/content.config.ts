@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
@@ -10,7 +10,21 @@ const sharedSchema = z.object({
   tags: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
   preview: z.boolean().default(true),
-  kind: z.enum(['article', 'note', 'experiment', 'case-study']).default('article')
+  kind: z.enum(['article', 'note', 'experiment', 'case-study']).default('article'),
+  series: reference('series').optional(),
+  seriesOrder: z.number().int().positive().optional()
+});
+
+const series = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/series' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    order: z.number().int().positive(),
+    tags: z.array(z.string()).default([]),
+    status: z.enum(['ongoing', 'complete']).default('ongoing'),
+    preview: z.boolean().default(true)
+  })
 });
 
 const blog = defineCollection({
@@ -34,4 +48,4 @@ const project = defineCollection({
   })
 });
 
-export const collections = { blog, ai, project };
+export const collections = { blog, ai, project, series };

@@ -13,6 +13,9 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const base = import.meta.env.BASE_URL;
+const series = entry.data.series
+  ? (await getCollection('series')).find((item) => item.id === entry.data.series?.id)
+  : undefined;
 ---
 
 <SiteLayout active="blog" title={`rndyt / ${entry.data.title}`} description={entry.data.description}>
@@ -25,6 +28,7 @@ const base = import.meta.env.BASE_URL;
         <span>kind={entry.data.kind}</span>
         <span>{(entry.data.updated ?? entry.data.date).toISOString().slice(0, 10)}</span>
         <span>{entry.data.tags.map((tag: string) => `#${tag}`).join(' ')}</span>
+        {series && <a href={`${base}series/${series.id}/`}>$ series/{series.id}</a>}
         <a href={base}>$ cd ..</a>
       </div>
     </header>

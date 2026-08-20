@@ -8,6 +8,8 @@ featured: true
 preview: true
 kind: experiment
 replay: true
+series: ai-native-loop
+seriesOrder: 2
 ---
 
 > 这是预览站占位内容。下方 replay 只用于展示交互结构，不代表真实项目、真实数据或真实模型结果。

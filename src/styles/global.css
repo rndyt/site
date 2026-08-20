@@ -256,6 +256,7 @@ h1 {
 .row-arrow { padding-top: 3px; color: var(--cyan); font: .82rem var(--mono); transition: color .16s ease, transform .16s ease; }
 .row-arrow::before { content: '$ '; color: var(--green); }
 .content-row:hover .row-arrow { color: var(--green); transform: translateX(3px); }
+.series-row:hover h3 { color: var(--green); }
 
 .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { display: inline-flex; align-items: center; min-height: 21px; padding: 1px 6px; border: 1px solid var(--line); color: var(--muted); font-size: .63rem; }
@@ -321,6 +322,14 @@ h1 {
 .article-body ul { padding-left: 22px; }
 .article-body li { margin-bottom: 8px; }
 .article-body blockquote { margin: 28px 0; padding: 10px 17px; border: 1px solid var(--line); background: var(--surface-raised); color: var(--text); }
+
+.series-intro { max-width: 100%; }
+.series-intro h1 { max-width: 900px; }
+.series-meta { margin-top: 22px; }
+.series-overview { max-width: 72ch; padding-top: 30px; }
+.series-overview p:last-child { margin-bottom: 0; }
+.series-workspace { margin-top: 38px; }
+.series-entry-row .meta span:last-child { overflow-wrap: anywhere; }
 
 .replay-shell { margin: 44px 0 8px; border: 1px solid var(--line-strong); background: var(--surface); }
 .replay-header { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface-raised); }
