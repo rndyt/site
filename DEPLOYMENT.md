@@ -1,5 +1,9 @@
 # 部署说明
 
+## Obsidian 自动发布
+
+本机的 Obsidian `Blog` 文件夹会定时同步到博客内容目录并推送到 GitHub。使用方法、文章属性和故障排查见 [`docs/OBSIDIAN_SYNC.md`](docs/OBSIDIAN_SYNC.md)。
+
 ## 推荐结构
 
 - GitHub：保存源码、Markdown 内容和版本记录。
