@@ -1,8 +1,8 @@
 {
   "version": 1,
   "files": [
-    "Agent/自顶向下的大语言模型基础介绍（一）——从API到模型-NSConflict-RainyDay-mac26.4.1.md",
     "Agent/自顶向下的大语言模型基础介绍（一）——从API到模型.md",
+    "Agent/自顶向下的大语言模型基础介绍（一）.md",
     "observability-loop.md",
     "short-note.md",
     "slow-decisions.md"
