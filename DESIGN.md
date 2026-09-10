@@ -112,7 +112,7 @@ The palette is a near-black working surface with pale text and a small ANSI acce
 - **Display** (600, `clamp(2.35rem, 5.2vw, 4.8rem)`, 1.02): identity and first-viewport thesis.
 - **Headline** (600, `clamp(2.2rem, 5vw, 4.1rem)`, 1.02): section and article introductions.
 - **Title** (500, 1rem-1.1rem, 1.4): output row and project titles.
-- **Body** (400, 1rem, 1.9, max 72ch): article content and explanations.
+- **Body** (400, 1rem, 1.9, up to 872px of article text): article content and explanations.
 - **Label** (400, .63rem-.76rem, 1.4): paths, prompts, metadata, statuses, and tags in SF Mono.
 
 ### Named Rules
@@ -122,7 +122,7 @@ The palette is a near-black working surface with pale text and a small ANSI acce
 
 The page container is `min(1200px, 100% - 48px)` on desktop and `100% - 32px` on small screens. The homepage first viewport uses a three-column workspace: directory tree, stdout thesis, and session status. At `max-width: 900px`, status becomes a full-width row; at `max-width: 700px`, all panes stack in reading order: directory, output, status.
 
-Index pages use a two-column workspace with a directory rail and output list, collapsing to one column below 700px. Article bodies are limited to 72ch. Tight groups use 4-8px gaps; panes use 16-24px padding; sections gain more space above headings than below them.
+Index pages use a two-column workspace with a directory rail and output list, collapsing to one column below 700px. Article bodies fill the 920px article shell with 24px padding on each side, giving desktop text up to 872px of width. Mobile padding remains 6px on each side. Tight groups use 4-8px gaps; panes use 16-24px padding; sections gain more space above headings than below them.
 
 ## Elevation & Depth
 
@@ -166,7 +166,7 @@ Terminal containers, rows, tags, and controls use square corners (`0px`). The on
 
 ### Do:
 - **Do** make paths, commands, state, and output labels functional or explanatory.
-- **Do** keep Chinese copy in readable system-font paragraphs with a 65-75ch measure.
+- **Do** keep Chinese copy in readable system-font paragraphs within the article shell, with responsive side padding.
 - **Do** use the same pane grammar across homepage, indexes, articles, and replay.
 - **Do** keep focus, selection, and reduced-motion states visible.
 

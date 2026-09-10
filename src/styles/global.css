@@ -311,7 +311,7 @@ h1 {
 .project-facts dd a { color: var(--cyan); }
 .project-facts dd a + a::before { content: ' / '; color: var(--dim); }
 
-.article-body { max-width: 72ch; padding: 38px 24px 0; color: var(--text-soft); font-size: 1rem; line-height: 1.9; }
+.article-body { max-width: 100%; padding: 38px 24px 0; color: var(--text-soft); font-size: 1rem; line-height: 1.9; }
 .article-body h2 { margin: 42px 0 14px; color: var(--text); font-size: 1.3rem; font-weight: 500; }
 .article-body h2::before { content: '$ '; color: var(--green); font: .72em var(--mono); }
 .article-body h3 { margin: 30px 0 10px; color: var(--text); font-size: 1.04rem; font-weight: 500; }
