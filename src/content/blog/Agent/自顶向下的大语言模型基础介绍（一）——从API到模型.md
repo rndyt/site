@@ -1,13 +1,16 @@
 ---
-title: "Chat Template"
-description: "现代 Agent 的核心驱动力，始终来源于大语言模型，Harness 的核心，始终是围绕 LLM API 构建的一套控制循环。 本文将从典型的 LLM API 出发，自顶向下地梳理这个正在影响人类世界的大语言模型的结构和原理。"
+title: 自顶向下的大语言模型基础介绍（一）——从 API 到模型
 date: 2026-09-10
-tags: []
+tags:
+  - LLM
+  - Agent
+description: "现代 Agent 的核心驱动力，始终来源于大语言模型，Harness 的核心，始终是围绕 LLM API 构建的一套控制循环。 本文将从典型的 LLM API 出发，自顶向下地梳理这个正在影响人类世界的大语言模型的结构和原理。"
 featured: false
 preview: true
 kind: article
 ---
 
+---
 现代 Agent 的核心驱动力，始终来源于大语言模型，Harness 的核心，始终是围绕 LLM API 构建的一套控制循环。
 本文将从典型的 LLM API 出发，自顶向下地梳理这个正在影响人类世界的大语言模型的结构和原理。
 
